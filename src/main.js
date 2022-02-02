@@ -14,8 +14,8 @@ app.get('/', (_, res) => {
   res.send('<h1>Hello there!</h1>')
 })
 
-const server = new https.Server(ServerConfig, app)
-const io = require('socket.io')(server, {
+const httpsServer = new https.Server(ServerConfig, app)
+const io = require('socket.io')(httpsServer, {
   cors: CorsConfig,
 })
 
@@ -70,8 +70,4 @@ io.on('connection', socket => {
   })
 })
 
-const PORT = process.env.PORT || 8000
-
-server.listen(PORT, () => {
-  console.log(`Listening on PORT: ${PORT}`.green)
-})
+httpsServer.listen(443)
