@@ -54,7 +54,7 @@ io.on('connection', socket => {
   })
 
   socket.on('Movement', ({ roomID, position }) => {
-    rooms[roomID].PLAYERS[socket.id]?.setPosition(position)
+    rooms[roomID].PLAYERS[socket.id].setPosition(position)
     io.to(roomID).except(socket.id).emit('PlayerMovement', {
       ID: socket.id,
       position,
@@ -62,7 +62,7 @@ io.on('connection', socket => {
   })
 
   socket.on('Rotation', ({ roomID, angle }) => {
-    rooms[roomID].PLAYERS[socket.id]?.setAngle(angle)
+    rooms[roomID].PLAYERS[socket.id].setAngle(angle)
     io.to(roomID).except(socket.id).emit('PlayerRotation', {
       ID: socket.id,
       angle,
