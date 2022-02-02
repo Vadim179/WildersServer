@@ -1,8 +1,8 @@
 require('colors')
 require('dotenv/config')
 
-const https = require('https')
-const { CorsConfig, ServerConfig } = require('./Config')
+const http = require('http')
+const { CorsConfig } = require('./Config')
 
 const express = require('express')
 const cors = require('cors')
@@ -14,8 +14,8 @@ app.get('/', (_, res) => {
   res.send('<h1>Hello there!</h1>')
 })
 
-const httpsServer = new https.Server(ServerConfig, app)
-const io = require('socket.io')(httpsServer, {
+const httpServer = new http.Server(app)
+const io = require('socket.io')(httpServer, {
   cors: CorsConfig,
 })
 
@@ -70,4 +70,6 @@ io.on('connection', socket => {
   })
 })
 
-httpsServer.listen(8000)
+httpServer.listen(8000, () => {
+  console.log('LISTENING ON PORT: 8000'.green)
+})
