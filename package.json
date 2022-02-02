@@ -1,0 +1,17 @@
+{
+  "name": "wildersio-server",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "start": "node src/main",
+    "start:development": "nodemon src/main",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "colors": "^1.4.0",
+    "cors": "^2.8.5",
+    "dotenv": "^15.0.0",
+    "express": "^4.17.2",
+    "socket.io": "^4.4.1"
+  }
+}
