@@ -1,8 +1,8 @@
 require('colors')
 require('dotenv/config')
 
-const http = require('http')
-const { CorsConfig } = require('./Config')
+const https = require('https')
+const { CorsConfig, ServerConfig } = require('./Config')
 
 const express = require('express')
 const cors = require('cors')
@@ -14,7 +14,7 @@ app.get('/', (_, res) => {
   res.send('<h1>Hello there!</h1>')
 })
 
-const server = new http.Server(app)
+const server = new https.Server(ServerConfig, app)
 const io = require('socket.io')(server, {
   cors: CorsConfig,
 })
