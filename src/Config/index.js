@@ -1,2 +1,3 @@
 const CorsConfig = require('./Cors.Config')
-module.exports = { CorsConfig }
+const Rooms = require('./Rooms.Config')
+module.exports = { CorsConfig, Rooms }
