@@ -64,7 +64,7 @@ setInterval(() => {
     const pack = {}
     socketIDs.forEach(socketID => {
       const socket = namespace.sockets.get(socketID)
-      if (socket.userData?.username === '') return
+      if (socket.userData.username === '') return
       pack[socketID] = { ...socket.userData }
     })
 
