@@ -3,9 +3,9 @@
     "checkJs": false,
     "resolveJsonModule": true,
     "moduleResolution": "node",
-    "target": "es2020",
-    "module": "es2015",
-    "lib": ["es2015"]
+    "target": "ESNEXT",
+    "module": "ESNEXT",
+    "lib": ["ESNEXT"]
   },
   "exclude": ["node_modules"]
 }
