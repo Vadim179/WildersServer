@@ -19,13 +19,20 @@ const io = require('socket.io')(server, {
 })
 
 io.on('connection', socket => {
-  socket.userData = { username: '', x: 0, y: 0, a: 0 }
+  socket.userData = {
+    username: '',
+    roomID: '',
+    x: 0,
+    y: 0,
+    a: 0,
+  }
 
   socket.on('get rooms', () => {
     socket.emit('rooms', Rooms)
   })
 
   socket.on('join room', ({ roomID, username }) => {
+    socket.userData.roomID = roomID
     socket.userData.username = username
     socket.join(roomID)
   })
@@ -35,11 +42,29 @@ io.on('connection', socket => {
     socket.userData.y = y
     socket.userData.a = a
   })
+
+  socket.on('disconnect', () => {
+    socket.userData = null
+  })
 })
 
 setInterval(() => {
-  console.log(io)
-}, 1000 / 1)
+  const namespace = io.of('/')
+
+  Rooms.forEach(roomID => {
+    const socketIDs = io.sockets.adapter.rooms.get(roomID)
+    if (socketIDs === undefined) return
+
+    const pack = {}
+    socketIDs.forEach(socketID => {
+      const socket = namespace.sockets.get(socketID)
+      if (socket.userData?.username === '') return
+      pack[socketID] = { ...socket.userData }
+    })
+
+    io.in(roomID).emit('room update', pack)
+  })
+}, 1000 / 60)
 
 server.listen(8000, () => {
   console.log('LISTENING ON PORT: 8000'.green)
