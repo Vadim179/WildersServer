@@ -39,13 +39,23 @@ io.on('connection', socket => {
     socket.join(roomID)
   })
 
-  socket.on('update', ({ x, y, a }) => {
-    socket.userData.x = x
-    socket.userData.y = y
+  socket.on('fix position', ({ x, y }) => {
+    const roomID = socket.userData.roomID
+    socket
+      .to(roomID)
+      .emit('fix position', { ID: socket.id, x, y })
+  })
+
+  socket.on('updateA', ({ a }) => {
     socket.userData.a = a
   })
 
-  socket.on('user left', () => {
+  socket.on('updateXY', ({ x, y }) => {
+    socket.userData.x = x
+    socket.userData.y = y
+  })
+
+  socket.on('leave room', () => {
     UserHelpers.handleUserDisconnect(socket)
   })
 
