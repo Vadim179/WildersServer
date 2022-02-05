@@ -1,5 +1,7 @@
 require('colors')
 require('dotenv/config')
+
+const { UserHelpers } = require('./Helpers')
 const { CorsConfig, Rooms } = require('./Config')
 
 const express = require('express')
@@ -43,8 +45,12 @@ io.on('connection', socket => {
     socket.userData.a = a
   })
 
+  socket.on('user left', () => {
+    UserHelpers.handleUserDisconnect(socket)
+  })
+
   socket.on('disconnect', () => {
-    socket.userData = null
+    UserHelpers.handleUserDisconnect(socket)
   })
 })
 
