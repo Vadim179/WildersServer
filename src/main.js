@@ -82,6 +82,6 @@ setInterval(() => {
   })
 }, 1000 / 60)
 
-server.listen(8080, () => {
-  console.log('LISTENING ON PORT: 8080'.green)
+server.listen(8000, () => {
+  console.log('LISTENING ON PORT: 8000'.green)
 })
