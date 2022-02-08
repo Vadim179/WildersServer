@@ -21,12 +21,14 @@ const io = require('socket.io')(server, {
 })
 
 io.on('connection', socket => {
-  socket.userData = {
+  socket.data = {
     username: '',
     roomID: '',
+    rotation: 0,
+    posX: 0,
+    posY: 0,
     x: 0,
     y: 0,
-    a: 0,
   }
 
   socket.on('get rooms', () => {
@@ -34,18 +36,26 @@ io.on('connection', socket => {
   })
 
   socket.on('join room', ({ roomID, username }) => {
-    socket.userData.roomID = roomID
-    socket.userData.username = username
+    socket.data.roomID = roomID
+    socket.data.username = username
     socket.join(roomID)
   })
 
-  socket.on('update', ({ x, y, a }) => {
-    socket.userData.x = x
-    socket.userData.y = y
-    socket.userData.a = a
+  socket.on('update rotation', ({ rotation }) => {
+    socket.data.rotation = rotation
   })
 
-  socket.on('user left', () => {
+  socket.on('update position', ({ posX, posY }) => {
+    socket.data.posX = posX
+    socket.data.posY = posY
+  })
+
+  socket.on('update movement', ({ x, y }) => {
+    socket.data.x = x
+    socket.data.y = y
+  })
+
+  socket.on('leave room', () => {
     UserHelpers.handleUserDisconnect(socket)
   })
 
@@ -64,14 +74,14 @@ setInterval(() => {
     const pack = {}
     socketIDs.forEach(socketID => {
       const socket = namespace.sockets.get(socketID)
-      if (socket.userData.username === '') return
-      pack[socketID] = { ...socket.userData }
+      if (socket.data.username === '') return
+      pack[socketID] = socket.data
     })
 
     io.in(roomID).emit('room update', pack)
   })
 }, 1000 / 60)
 
-server.listen(8000, () => {
-  console.log('LISTENING ON PORT: 8000'.green)
+server.listen(8080, () => {
+  console.log('LISTENING ON PORT: 8080'.green)
 })
